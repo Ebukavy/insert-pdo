@@ -1,11 +1,12 @@
 <?php
-$dsn = "mysql:host=localhost;dbname=winkel";
-$username = "root";
-$password = "";
+$host = "localhost:3307"; 
+$username = "root"; 
+$password = ""; 
+$database = "winkel"; 
 
 try {
-    $db = new PDO($dsn, $username, $password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $product_naam = $_POST['product_naam'];
@@ -14,7 +15,7 @@ try {
 
         $query = "INSERT INTO Producten (product_naam, prijs_per_stuk, omschrijving) 
                   VALUES (:product_naam, :prijs_per_stuk, :omschrijving)";
-        $stmt = $db->prepare($query);
+        $stmt = $conn->prepare($query);
         $stmt->bindParam(':product_naam', $product_naam);
         $stmt->bindParam(':prijs_per_stuk', $prijs_per_stuk);
         $stmt->bindParam(':omschrijving', $omschrijving);
