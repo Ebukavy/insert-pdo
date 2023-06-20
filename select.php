@@ -1,15 +1,16 @@
 <?php
-$dsn = "mysql:host=localhost;dbname=winkel";
-$username = "root";
-$password = "";
+$host = "localhost:3307"; 
+$username = "root"; 
+$password = ""; 
+$database = "winkel"; 
 
 try {
-    $db = new PDO($dsn, $username, $password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     echo "<h2>Alle producten</h2>";
     $query = "SELECT * FROM Producten";
-    $stmt = $db->query($query);
+    $stmt = $conn->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($result as $row) {
@@ -21,7 +22,7 @@ try {
 
     echo "<h2>Product met product_code 1</h2>";
     $query = "SELECT * FROM Producten WHERE product_code = ?";
-    $stmt = $db->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->execute([1]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,7 +33,7 @@ try {
 
     echo "<h2>Product met product_code 2</h2>";
     $query = "SELECT * FROM Producten WHERE product_code = :product_code";
-    $stmt = $db->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bindValue(':product_code', 2, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
